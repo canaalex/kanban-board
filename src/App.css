@@ -1,7 +1,35 @@
 .App {
   text-align: center;
 }
-
+/* .glass-effect{
+  background: rgba( 255, 255, 255, 0.2 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 12.5px );
+  -webkit-backdrop-filter: blur( 12.5px );
+  border-radius: 10px;
+} */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.3); /* Adjust the alpha channel (last value) for opacity */
+  padding: 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px); /* Optional: blur the background */
+  -webkit-backdrop-filter: blur(10px); /* Optional for Safari */
+}
+.task-list{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.column-background{
+  background-color: #1e549f;
+}
+.header{
+  background-color: #081f37;
+}
+.add-button{
+  display: flex;
+  justify-content: end;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
