@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useState } from "react";
 import Column from "./Column";
+import { v4 as uuidv4 } from "uuid";
 
-export default function KanbanBoard() {
+export default function KanbanBoard({addedTask}) {
   const [completed, setCompleted] = useState([
     { id: 7, title: "Wake early", description: "Start your day with a fresh mind.", status: "completed" },
     { id: 8, title: "Make dinner", description: "Prepare a delicious meal for yourself or your family.", status: "completed" },
@@ -21,46 +22,22 @@ export default function KanbanBoard() {
     { id: 5, title: "Clean the car", description: "Keep your car clean and well-maintained.", status: "doing" },
     { id: 6, title: "Call the Plumber", description: "Arrange for a plumber to fix any plumbing issues in your home.", status: "doing" },
   ]);
-//   const handleDragEnd = (result) => {
-//     const { destination, source, draggableId } = result;
-//     if (!destination) return; // Dropping outside a droppable area
-//     if (source.droppableId === destination.droppableId) return; // Same column, no change needed
-
-//     // Remove the task from the source column
-//     let updatedSourceColumn = [];
-//     switch (source.droppableId) {
-//       case "1":
-//         updatedSourceColumn = removeItemById(draggableId, todo);
-//         setTodo(updatedSourceColumn);
-//         break;
-//       case "2":
-//         updatedSourceColumn = removeItemById(draggableId, doing);
-//         setDoing(updatedSourceColumn);
-//         break;
-//       case "3":
-//         updatedSourceColumn = removeItemById(draggableId, completed);
-//         setCompleted(updatedSourceColumn);
-//         break;
-//       default:
-//         break;
-//     }
-
-//     // Add the task to the destination column
-//     const task = findItemById(draggableId, [...todo, ...doing, ...completed]);
-//     switch (destination.droppableId) {
-//       case "1":
-//         setTodo([{ ...task, status: "todo" }, ...todo]);
-//         break;
-//       case "2":
-//         setDoing([{ ...task, status: "doing" }, ...doing]);
-//         break;
-//       case "3":
-//         setCompleted([{ ...task, status: "completed" }, ...completed]);
-//         break;
-//       default:
-//         break;
-//     }
-//   };
+  useEffect(() => {
+    if(!addedTask) return;
+    console.log('added task',addedTask);
+    if (addedTask.status === 'todo') {
+      const newTodoTask = { ...addedTask, id: uuidv4() }; 
+      setTodo([...todo, newTodoTask]);
+    }
+    else if(addedTask.status==="doing"){
+      const newDoingTask = { ...addedTask, id: uuidv4() }; 
+      setDoing([...doing, newDoingTask]);
+    }
+    else if(addedTask.status==="done"){
+      const newCompleteTask = { ...addedTask, id: uuidv4(),status:"completed" }; 
+      setCompleted([...completed, newCompleteTask]);
+    }
+  }, [addedTask, todo]);
 const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     if (!destination) return; // Dropping outside a droppable area
