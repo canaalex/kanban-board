@@ -2,7 +2,7 @@ import React from 'react'
 import { Droppable } from 'react-beautiful-dnd'
 import Task from './Task'
 
-export default function Column({ title, tasks, id }) {
+export default function Column({ title, tasks, id, setEditTaskForm }) {
   return (
     <div className="container column-background p-3 rounded d-flex flex-column">
       <h4 className='text-white align-self-start ml-3'>{title}</h4>
@@ -14,7 +14,7 @@ export default function Column({ title, tasks, id }) {
             className="task-list p-3"
           >
             {tasks.map((task, index) => (
-              <Task key={task.id} task={task} index={index} />
+              <Task key={task.id} task={task} index={index} setEditTaskForm={setEditTaskForm} />
             ))}
             {provided.placeholder}
           </div>

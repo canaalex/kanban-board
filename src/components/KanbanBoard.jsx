@@ -3,41 +3,136 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useState } from "react";
 import Column from "./Column";
 import { v4 as uuidv4 } from "uuid";
+import EditModal from "./EditModal";
 
-export default function KanbanBoard({addedTask}) {
-  const [completed, setCompleted] = useState([
-    { id: 7, title: "Wake early", description: "Start your day with a fresh mind.", status: "completed" },
-    { id: 8, title: "Make dinner", description: "Prepare a delicious meal for yourself or your family.", status: "completed" },
-    { id: 9, title: "Sleep at 11", description: "Get a good night's sleep to rejuvenate for the next day.", status: "completed" },
-  ]);
-
-  const [todo, setTodo] = useState([
-    { id: 1, title: "Go to work", description: "Start your workday and be productive.", status: "todo" },
-    { id: 2, title: "Drink a glass of water", description: "Stay hydrated and maintain good health.", status: "todo" },
-    { id: 3, title: "Gym time", description: "Exercise to keep yourself fit and healthy.", status: "todo" },
-  ]);
-
-  const [doing, setDoing] = useState([
-    { id: 4, title: "Help brother", description: "Assist your brother with any tasks or challenges he may have.", status: "doing" },
-    { id: 5, title: "Clean the car", description: "Keep your car clean and well-maintained.", status: "doing" },
-    { id: 6, title: "Call the Plumber", description: "Arrange for a plumber to fix any plumbing issues in your home.", status: "doing" },
-  ]);
+export default function KanbanBoard({addedTask,setEditTaskForm,editTaskForm,setEditedTask,editedTask}) {
+  const [completed, setCompleted] = useState(() => {
+    const storedCompleted = localStorage.getItem("completed");
+    return storedCompleted ? JSON.parse(storedCompleted) : [
+      { id: 7, title: "Wake early", description: "Start your day with a fresh mind.", status: "completed" },
+      { id: 8, title: "Make dinner", description: "Prepare a delicious meal for yourself or your family.", status: "completed" },
+      { id: 9, title: "Sleep at 11", description: "Get a good night's sleep to rejuvenate for the next day.", status: "completed" },
+    ];
+  });
+  const [todo, setTodo] = useState(() => {
+    const storedTodo = localStorage.getItem("todo");
+    return storedTodo ? JSON.parse(storedTodo) : [
+      { id: 1, title: "Go to work", description: "Start your workday and be productive.", status: "todo" },
+      { id: 2, title: "Drink a glass of water", description: "Stay hydrated and maintain good health.", status: "todo" },
+      { id: 3, title: "Gym time", description: "Exercise to keep yourself fit and healthy.", status: "todo" },
+    ];
+  });
+  const [doing, setDoing] = useState(() => {
+    const storedDoing = localStorage.getItem("doing");
+    return storedDoing ? JSON.parse(storedDoing) : [
+      { id: 4, title: "Help brother", description: "Assist your brother with any tasks or challenges he may have.", status: "doing" },
+      { id: 5, title: "Clean the car", description: "Keep your car clean and well-maintained.", status: "doing" },
+      { id: 6, title: "Call the Plumber", description: "Arrange for a plumber to fix any plumbing issues in your home.", status: "doing" },
+    ];
+  });
   useEffect(() => {
-    if(!addedTask) return;
-    console.log('added task',addedTask);
+    localStorage.setItem("completed", JSON.stringify(completed));
+    localStorage.setItem("todo", JSON.stringify(todo));
+    localStorage.setItem("doing", JSON.stringify(doing));
+  }, [completed, todo, doing]);
+
+  useEffect(() => {
+    if (!addedTask) return;
+    console.log('added task', addedTask);
     if (addedTask.status === 'todo') {
-      const newTodoTask = { ...addedTask, id: uuidv4() }; 
-      setTodo([...todo, newTodoTask]);
+      setTodo(prevTodo => {
+        const newTodoTask = { ...addedTask, id: uuidv4() };
+        return [...prevTodo, newTodoTask];
+      });
     }
-    else if(addedTask.status==="doing"){
-      const newDoingTask = { ...addedTask, id: uuidv4() }; 
-      setDoing([...doing, newDoingTask]);
+    else if (addedTask.status === "doing") {
+      setDoing(prevDoing => {
+        const newDoingTask = { ...addedTask, id: uuidv4() };
+        return [...prevDoing, newDoingTask];
+      });
     }
-    else if(addedTask.status==="done"){
-      const newCompleteTask = { ...addedTask, id: uuidv4(),status:"completed" }; 
-      setCompleted([...completed, newCompleteTask]);
+    else if (addedTask.status === "done") {
+      setCompleted(prevCompleted => {
+        const newCompleteTask = { ...addedTask, id: uuidv4(), status: "completed" };
+        return [...prevCompleted, newCompleteTask];
+      });
     }
-  }, [addedTask, todo]);
+  }, [addedTask]);
+
+  useEffect(() => {
+    if (!editedTask) return;
+    console.log('edited task', editedTask);
+    
+    if (editedTask.status === 'todo') {
+      // setTodo(prevTodo => {
+      //   return prevTodo.map(task => {
+      //     if (task.id === editedTask.id) {
+           
+      //       return editedTask;
+      //     }
+      //     return task;
+      //   });
+      // });
+      setDoing(prevDoing => prevDoing.filter(task => task.id !== editedTask.id));
+      setCompleted(prevCompleted => prevCompleted.filter(task => task.id !== editedTask.id));
+      setTodo(prevTodo => {
+        const existingTaskIndex = prevTodo.findIndex(task => task.id === editedTask.id);
+        if (existingTaskIndex !== -1) {
+          // Update the existing task in the doing column
+          const updatedTodo = [...prevTodo];
+          updatedTodo[existingTaskIndex] = editedTask;
+          return updatedTodo;
+        } else {
+          // Add the edited task to the doing column
+          return [...prevTodo, editedTask];
+        }
+      });
+    }
+    else if (editedTask.status === "doing") {
+      // Remove the task from the todo column
+      setTodo(prevTodo => prevTodo.filter(task => task.id !== editedTask.id));
+      setCompleted(prevCompleted => prevCompleted.filter(task => task.id !== editedTask.id));
+      setDoing(prevDoing => {
+        const existingTaskIndex = prevDoing.findIndex(task => task.id === editedTask.id);
+        if (existingTaskIndex !== -1) {
+          // Update the existing task in the doing column
+          const updatedDoing = [...prevDoing];
+          updatedDoing[existingTaskIndex] = editedTask;
+          return updatedDoing;
+        } else {
+          // Add the edited task to the doing column
+          return [...prevDoing, editedTask];
+        }
+      });
+    }
+    
+    else if(editedTask.status==="done"){
+      setTodo(prevTodo => prevTodo.filter(task => task.id !== editedTask.id));
+      setDoing(prevDoing => prevDoing.filter(task => task.id !== editedTask.id));
+      setCompleted(prevCompleted => {
+        const existingTaskIndex = prevCompleted.findIndex(task => task.id === editedTask.id);
+        if (existingTaskIndex !== -1) {
+          // Update the existing task in the doing column
+          const updatedCompleted = [...prevCompleted];
+          updatedCompleted[existingTaskIndex] = {...editedTask,status:"completed"};
+          return updatedCompleted;
+        } else {
+          // Add the edited task to the doing column
+          return [...prevCompleted, {...editedTask,status:"completed"}];
+        }
+      });
+      // setCompleted(prevCompleted => {
+      //   return prevCompleted.map(task => {
+      //     if (task.id === editedTask.id) {
+           
+      //       return {...editedTask,status:"completed"};
+      //     }
+      //     return task;
+      //   });
+      // });
+    }
+  }, [editedTask]);
+  
 const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     if (!destination) return; // Dropping outside a droppable area
@@ -124,17 +219,18 @@ const handleDragEnd = (result) => {
 
   return (
     <div className="container">
+      <EditModal editTaskForm={editTaskForm} setEditedTask={setEditedTask}/>
     
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="row">
           <div className="col-4">
-            <Column title={"To Do"} tasks={todo} id={"1"} />
+            <Column title={"To Do"} tasks={todo} id={"1"} setEditTaskForm={setEditTaskForm}/>
           </div>
           <div className="col-4">
-            <Column title={"Doing"} tasks={doing} id={"2"} />
+            <Column title={"Doing"} tasks={doing} id={"2"} setEditTaskForm={setEditTaskForm}/>
           </div>
           <div className="col-4">
-            <Column title={"Done"} tasks={completed} id={"3"} />
+            <Column title={"Done"} tasks={completed} id={"3"} setEditTaskForm={setEditTaskForm}/>
           </div>
         </div>
       </DragDropContext>
