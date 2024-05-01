@@ -13,9 +13,9 @@ function App() {
   useEffect(()=>{
 console.log('inside app',addedTask)
   },[addedTask])
-  useEffect(()=>{
-    localStorage.clear();
-      },[])
+  // useEffect(()=>{
+  //   localStorage.clear();
+  //     },[])
   return (
     <div className="App">
       <Header/>

@@ -23,8 +23,14 @@
 .column-background{
   background-color: #1e549f;
 }
+.container{
+  max-width: 1260px;
+}
 .header{
   background-color: #081f37;
+}
+.card-title{
+  max-width: 180px;
 }
 .add-button{
   display: flex;

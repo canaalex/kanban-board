@@ -1,31 +1,56 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-export default function EditModal({editTaskForm,setEditedTask}) {
-    const [formData,setFormdata]=useState({
-        title:'',
-        status:'todo',
-        description:''
+export default function EditModal({ editTaskForm, setEditedTask }) {
+  const [formData, setFormdata] = useState({
+    title: "",
+    status: "todo",
+    description: "",
+  });
+  const modalRef = useRef(null);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormdata({ ...formData, [name]: value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("handle submit in edit", formData);
+    const { title, description } = formData;
+    // Validate title (only alphabets)
+    const titleRegex = /^[a-zA-Z\s]+$/;
+    if (!titleRegex.test(title)) {
+      alert("Title should contain only alphabets.");
+      return;
+    }
+
+    // Validate description (minimum 25 characters)
+    if (description.length < 25) {
+      alert("Description should have a minimum of 25 characters.");
+      return;
+    }
+    setEditedTask(formData);
+    const modal = modalRef.current;
+    if (modal) {
+      const backdrop = document.querySelector(".modal-backdrop");
+      console.log('backdrop',backdrop)
+      if (backdrop) {
+        backdrop.remove(); // Remove the backdrop
+      }
+      modal.classList.remove("show"); // Remove the "show" class to hide the modal
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    }
+
+    setFormdata({
+      title: "",
+      status: "todo",
+      description: "",
     });
-    
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormdata({ ...formData, [name]: value });
-      };
-     const handleSubmit=(e)=>{
-        e.preventDefault();
-        console.log('handle submit in edit',formData);
-        setEditedTask(formData);
-        setFormdata({
-            title:'',
-            status:'todo',
-            description:''
-        });
-     }
-    console.log('editform',formData);
-    useEffect(()=>{
-        console.log('editModal',editTaskForm)
-        setFormdata(editTaskForm);
-    },[editTaskForm])
+  };
+  console.log("editform", formData);
+  useEffect(() => {
+    console.log("editModal", editTaskForm);
+    setFormdata(editTaskForm);
+  }, [editTaskForm]);
   return (
     <div
       className="modal fade"
@@ -34,13 +59,13 @@ export default function EditModal({editTaskForm,setEditedTask}) {
       role="dialog"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
+      ref={modalRef}
     >
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
               Edit Task
-              
             </h5>
             <button
               type="button"
@@ -66,9 +91,12 @@ export default function EditModal({editTaskForm,setEditedTask}) {
               </div>
               <div className="form-group">
                 <label className="d-flex">Select Status</label>
-                <select className="form-control"  value={formData.status}
+                <select
+                  className="form-control"
+                  value={formData.status}
                   onChange={handleChange}
-                  name="status">
+                  name="status"
+                >
                   <option value="todo">Todo</option>
                   <option value="doing">Doing</option>
                   <option value="done">Done</option>
@@ -84,21 +112,19 @@ export default function EditModal({editTaskForm,setEditedTask}) {
                   name="description"
                 ></textarea>
               </div>
-              <button
-              type="button"
-              className="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Save changes
-            </button>
+              <div className="d-flex justify-content-end"> <button
+                type="button"
+                className="btn  header text-white"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" className="btn column-background text-white ml-2 ">
+                Save changes
+              </button></div>
+             
             </form>
           </div>
-          {/* <div className="modal-footer">
-            
-          </div> */}
         </div>
       </div>
     </div>

@@ -7,11 +7,11 @@ import EditModal from "./EditModal";
 
 export default function KanbanBoard({addedTask,setEditTaskForm,editTaskForm,setEditedTask,editedTask}) {
   const [completed, setCompleted] = useState(() => {
-    const storedCompleted = localStorage.getItem("completed");
+    const storedCompleted = localStorage.getItem("done");
     return storedCompleted ? JSON.parse(storedCompleted) : [
-      { id: 7, title: "Wake early", description: "Start your day with a fresh mind.", status: "completed" },
-      { id: 8, title: "Make dinner", description: "Prepare a delicious meal for yourself or your family.", status: "completed" },
-      { id: 9, title: "Sleep at 11", description: "Get a good night's sleep to rejuvenate for the next day.", status: "completed" },
+      { id: 7, title: "Wake early", description: "Start your day with a fresh mind.", status: "done" },
+      { id: 8, title: "Make dinner", description: "Prepare a delicious meal for yourself or your family.", status: "done" },
+      { id: 9, title: "Sleep at 11", description: "Get a good night's sleep to rejuvenate for the next day.", status: "done" },
     ];
   });
   const [todo, setTodo] = useState(() => {
@@ -31,7 +31,7 @@ export default function KanbanBoard({addedTask,setEditTaskForm,editTaskForm,setE
     ];
   });
   useEffect(() => {
-    localStorage.setItem("completed", JSON.stringify(completed));
+    localStorage.setItem("done", JSON.stringify(completed));
     localStorage.setItem("todo", JSON.stringify(todo));
     localStorage.setItem("doing", JSON.stringify(doing));
   }, [completed, todo, doing]);
@@ -53,7 +53,7 @@ export default function KanbanBoard({addedTask,setEditTaskForm,editTaskForm,setE
     }
     else if (addedTask.status === "done") {
       setCompleted(prevCompleted => {
-        const newCompleteTask = { ...addedTask, id: uuidv4(), status: "completed" };
+        const newCompleteTask = { ...addedTask, id: uuidv4(), status: "done" };
         return [...prevCompleted, newCompleteTask];
       });
     }
@@ -114,18 +114,18 @@ export default function KanbanBoard({addedTask,setEditTaskForm,editTaskForm,setE
         if (existingTaskIndex !== -1) {
           // Update the existing task in the doing column
           const updatedCompleted = [...prevCompleted];
-          updatedCompleted[existingTaskIndex] = {...editedTask,status:"completed"};
+          updatedCompleted[existingTaskIndex] = {...editedTask,status:"done"};
           return updatedCompleted;
         } else {
           // Add the edited task to the doing column
-          return [...prevCompleted, {...editedTask,status:"completed"}];
+          return [...prevCompleted, {...editedTask,status:"done"}];
         }
       });
       // setCompleted(prevCompleted => {
       //   return prevCompleted.map(task => {
       //     if (task.id === editedTask.id) {
            
-      //       return {...editedTask,status:"completed"};
+      //       return {...editedTask,status:"done"};
       //     }
       //     return task;
       //   });
@@ -217,20 +217,26 @@ const handleDragEnd = (result) => {
     return array.filter((item) => item.id != id);
   }
 
+  function deleteTask(deletedTask){
+    setTodo(prevTodo => prevTodo.filter(task => task.id !== deletedTask.id));
+     setDoing(prevDoing => prevDoing.filter(task => task.id !== deletedTask.id));
+    setCompleted(prevCompleted => prevCompleted.filter(task => task.id !== deletedTask.id));
+  }
+
   return (
-    <div className="container">
+    <div className="container mb-5">
       <EditModal editTaskForm={editTaskForm} setEditedTask={setEditedTask}/>
     
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="row">
           <div className="col-4">
-            <Column title={"To Do"} tasks={todo} id={"1"} setEditTaskForm={setEditTaskForm}/>
+            <Column title={"To Do"} tasks={todo} id={"1"} setEditTaskForm={setEditTaskForm} deleteTask={deleteTask}/>
           </div>
           <div className="col-4">
-            <Column title={"Doing"} tasks={doing} id={"2"} setEditTaskForm={setEditTaskForm}/>
+            <Column title={"Doing"} tasks={doing} id={"2"} setEditTaskForm={setEditTaskForm} deleteTask={deleteTask}/>
           </div>
           <div className="col-4">
-            <Column title={"Done"} tasks={completed} id={"3"} setEditTaskForm={setEditTaskForm}/>
+            <Column title={"Done"} tasks={completed} id={"3"} setEditTaskForm={setEditTaskForm} deleteTask={deleteTask}/>
           </div>
         </div>
       </DragDropContext>
