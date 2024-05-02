@@ -20,20 +20,20 @@ export default function KanbanBoard({
       ? JSON.parse(storedCompleted)
       : [
           {
-            id: 7,
+            id: uuidv4(),
             title: "Wake early",
             description: "Start your day with a fresh mind.",
             status: "done",
           },
           {
-            id: 8,
+            id: uuidv4(),
             title: "Make dinner",
             description:
               "Prepare a delicious meal for yourself or your family.",
             status: "done",
           },
           {
-            id: 9,
+            id: uuidv4(),
             title: "Sleep Early",
             description:
               "Get a good night's sleep to rejuvenate for the next day.",
@@ -49,19 +49,19 @@ export default function KanbanBoard({
       ? JSON.parse(storedTodo)
       : [
           {
-            id: 1,
+            id: uuidv4(),
             title: "Go to work",
             description: "Start your workday and be productive.",
             status: "todo",
           },
           {
-            id: 2,
+            id: uuidv4(),
             title: "Drink a glass of water",
             description: "Stay hydrated and maintain good health.",
             status: "todo",
           },
           {
-            id: 3,
+            id: uuidv4(),
             title: "Gym time",
             description: "Exercise to keep yourself fit and healthy.",
             status: "todo",
@@ -76,20 +76,20 @@ export default function KanbanBoard({
       ? JSON.parse(storedDoing)
       : [
           {
-            id: 4,
+            id: uuidv4(),
             title: "Help brother",
             description:
               "Assist your brother with any tasks or challenges he may have.",
             status: "doing",
           },
           {
-            id: 5,
+            id: uuidv4(),
             title: "Clean the car",
             description: "Keep your car clean and well-maintained.",
             status: "doing",
           },
           {
-            id: 6,
+            id: uuidv4(),
             title: "Call the Plumber",
             description:
               "Arrange for a plumber to fix any plumbing issues in your home.",
