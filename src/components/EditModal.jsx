@@ -6,15 +6,19 @@ export default function EditModal({ editTaskForm, setEditedTask }) {
     status: "todo",
     description: "",
   });
+
   const modalRef = useRef(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormdata({ ...formData, [name]: value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("handle submit in edit", formData);
+
     const { title, description } = formData;
+
     // Validate title (only alphabets)
     const titleRegex = /^[a-zA-Z\s]+$/;
     if (!titleRegex.test(title)) {
@@ -31,11 +35,11 @@ export default function EditModal({ editTaskForm, setEditedTask }) {
     const modal = modalRef.current;
     if (modal) {
       const backdrop = document.querySelector(".modal-backdrop");
-      console.log('backdrop',backdrop)
+      console.log("backdrop", backdrop);
       if (backdrop) {
-        backdrop.remove(); // Remove the backdrop
+        backdrop.remove();
       }
-      modal.classList.remove("show"); // Remove the "show" class to hide the modal
+      modal.classList.remove("show");
       modal.setAttribute("aria-hidden", "true");
       document.body.classList.remove("modal-open");
     }
@@ -46,11 +50,11 @@ export default function EditModal({ editTaskForm, setEditedTask }) {
       description: "",
     });
   };
-  console.log("editform", formData);
+
   useEffect(() => {
-    console.log("editModal", editTaskForm);
     setFormdata(editTaskForm);
   }, [editTaskForm]);
+  
   return (
     <div
       className="modal fade"
@@ -112,17 +116,22 @@ export default function EditModal({ editTaskForm, setEditedTask }) {
                   name="description"
                 ></textarea>
               </div>
-              <div className="d-flex justify-content-end"> <button
-                type="button"
-                className="btn  header text-white"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="submit" className="btn column-background text-white ml-2 ">
-                Save changes
-              </button></div>
-             
+              <div className="d-flex justify-content-end">
+                {" "}
+                <button
+                  type="button"
+                  className="btn  header text-white"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  className="btn column-background text-white ml-2 "
+                >
+                  Save changes
+                </button>
+              </div>
             </form>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import './App.css';
 import KanbanBoard from './components/KanbanBoard';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Header from './components/Header';
 import ActionBar from './components/ActionBar';
 
@@ -9,12 +9,7 @@ function App() {
   const [addedTask,setAddedTask]=useState({});
   const [editTaskForm,setEditTaskForm]=useState({});
   const [editedTask,setEditedTask]=useState({})
-  useEffect(()=>{
-console.log('inside app',addedTask)
-  },[addedTask])
-  // useEffect(()=>{
-  //   localStorage.clear();
-  //     },[])
+
   return (
     <div className="App">
       <Header/>

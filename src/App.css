@@ -1,19 +1,13 @@
 .App {
   text-align: center;
 }
-/* .glass-effect{
-  background: rgba( 255, 255, 255, 0.2 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 12.5px );
-  -webkit-backdrop-filter: blur( 12.5px );
-  border-radius: 10px;
-} */
+
 .glass-effect {
-  background: rgba(255, 255, 255, 0.3); /* Adjust the alpha channel (last value) for opacity */
+  background: rgba(255, 255, 255, 0.3); 
   padding: 10px;
   border-radius: 10px;
-  backdrop-filter: blur(10px); /* Optional: blur the background */
-  -webkit-backdrop-filter: blur(10px); /* Optional for Safari */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); 
 }
 .task-list{
   display: flex;

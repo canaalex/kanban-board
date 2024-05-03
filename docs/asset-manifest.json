@@ -1,15 +1,13 @@
 {
   "files": {
     "main.css": "https://canaalex.github.io/kanban-board/static/css/main.139dc82a.css",
-    "main.js": "https://canaalex.github.io/kanban-board/static/js/main.44caeb84.js",
-    "static/js/453.f0f88b0d.chunk.js": "https://canaalex.github.io/kanban-board/static/js/453.f0f88b0d.chunk.js",
+    "main.js": "https://canaalex.github.io/kanban-board/static/js/main.4348f579.js",
     "index.html": "https://canaalex.github.io/kanban-board/index.html",
     "main.139dc82a.css.map": "https://canaalex.github.io/kanban-board/static/css/main.139dc82a.css.map",
-    "main.44caeb84.js.map": "https://canaalex.github.io/kanban-board/static/js/main.44caeb84.js.map",
-    "453.f0f88b0d.chunk.js.map": "https://canaalex.github.io/kanban-board/static/js/453.f0f88b0d.chunk.js.map"
+    "main.4348f579.js.map": "https://canaalex.github.io/kanban-board/static/js/main.4348f579.js.map"
   },
   "entrypoints": [
     "static/css/main.139dc82a.css",
-    "static/js/main.44caeb84.js"
+    "static/js/main.4348f579.js"
   ]
 }

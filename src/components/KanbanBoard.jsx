@@ -13,7 +13,6 @@ export default function KanbanBoard({
   editedTask,
 }) {
   const [completed, setCompleted] = useState(() => {
-
     const storedCompleted = localStorage.getItem("done");
 
     return storedCompleted
@@ -22,14 +21,15 @@ export default function KanbanBoard({
           {
             id: uuidv4(),
             title: "Wake early",
-            description: "Start your day with a fresh mind.",
+            description:
+              "Start your day with a fresh mind.Eat your medicines too.",
             status: "done",
           },
           {
             id: uuidv4(),
             title: "Make dinner",
             description:
-              "Prepare a delicious meal for yourself or your family.",
+              "Prepare a delicious meal for yourself or your family.Make chicken curry.",
             status: "done",
           },
           {
@@ -41,8 +41,8 @@ export default function KanbanBoard({
           },
         ];
   });
-  const [todo, setTodo] = useState(() => {
 
+  const [todo, setTodo] = useState(() => {
     const storedTodo = localStorage.getItem("todo");
 
     return storedTodo
@@ -68,8 +68,8 @@ export default function KanbanBoard({
           },
         ];
   });
-  const [doing, setDoing] = useState(() => {
 
+  const [doing, setDoing] = useState(() => {
     const storedDoing = localStorage.getItem("doing");
 
     return storedDoing
@@ -106,19 +106,17 @@ export default function KanbanBoard({
 
   useEffect(() => {
     if (!addedTask) return;
-   
+
     if (addedTask.status === "todo") {
       setTodo((prevTodo) => {
         const newTodoTask = { ...addedTask, id: uuidv4() };
         return [...prevTodo, newTodoTask];
       });
-
     } else if (addedTask.status === "doing") {
       setDoing((prevDoing) => {
         const newDoingTask = { ...addedTask, id: uuidv4() };
         return [...prevDoing, newDoingTask];
       });
-
     } else if (addedTask.status === "done") {
       setCompleted((prevCompleted) => {
         const newCompleteTask = { ...addedTask, id: uuidv4(), status: "done" };
@@ -132,7 +130,6 @@ export default function KanbanBoard({
     console.log("edited task", editedTask);
 
     if (editedTask.status === "todo") {
-     
       setDoing((prevDoing) =>
         prevDoing.filter((task) => task.id !== editedTask.id)
       );
@@ -165,6 +162,7 @@ export default function KanbanBoard({
         const existingTaskIndex = prevDoing.findIndex(
           (task) => task.id === editedTask.id
         );
+
         if (existingTaskIndex !== -1) {
           // Update the existing task in the doing column
           const updatedDoing = [...prevDoing];
@@ -175,18 +173,20 @@ export default function KanbanBoard({
           return [...prevDoing, editedTask];
         }
       });
-
     } else if (editedTask.status === "done") {
       setTodo((prevTodo) =>
         prevTodo.filter((task) => task.id !== editedTask.id)
       );
+
       setDoing((prevDoing) =>
         prevDoing.filter((task) => task.id !== editedTask.id)
       );
+
       setCompleted((prevCompleted) => {
         const existingTaskIndex = prevCompleted.findIndex(
           (task) => task.id === editedTask.id
         );
+
         if (existingTaskIndex !== -1) {
           // Update the existing task in the doing column
           const updatedCompleted = [...prevCompleted];
@@ -205,6 +205,7 @@ export default function KanbanBoard({
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
+
     if (!destination) return; // Dropping outside a droppable area
     if (source.droppableId === destination.droppableId) {
       // Dragging within the same column
@@ -216,12 +217,12 @@ export default function KanbanBoard({
       updateColumn(updatedColumn, source.droppableId);
     } else {
       // Moving to a different column
-     
+
       let task = findItemById(draggableId, getColumnById(source.droppableId));
-      console.log('task',task);
+      console.log("task", task);
 
       if (!task) return;
-     
+
       if (destination.droppableId === "1") {
         task = { ...task, status: "todo" };
       } else if (destination.droppableId === "2") {
@@ -245,6 +246,7 @@ export default function KanbanBoard({
     }
   };
 
+  // Function to reorder items within an array
   const reorderItems = (items, startIndex, endIndex) => {
     const result = Array.from(items);
     const [removed] = result.splice(startIndex, 1);
@@ -252,6 +254,7 @@ export default function KanbanBoard({
     return result;
   };
 
+  //Insert the task at the right position in the column
   const insertItemAtPosition = (items, item, index) => {
     const result = Array.from(items);
     result.splice(index, 0, item);
@@ -275,7 +278,7 @@ export default function KanbanBoard({
     }
   };
 
-  // Get the column based on its ID
+  // Get the column name based on its ID
   const getColumnById = (columnId) => {
     switch (columnId) {
       case "1":
@@ -290,12 +293,10 @@ export default function KanbanBoard({
   };
 
   function findItemById(id, array) {
-    
     return array.find((item) => item.id == id);
   }
 
   function removeItemById(id, array) {
-
     return array.filter((item) => item.id != id);
   }
 
@@ -303,9 +304,11 @@ export default function KanbanBoard({
     setTodo((prevTodo) =>
       prevTodo.filter((task) => task.id !== deletedTask.id)
     );
+
     setDoing((prevDoing) =>
       prevDoing.filter((task) => task.id !== deletedTask.id)
     );
+
     setCompleted((prevCompleted) =>
       prevCompleted.filter((task) => task.id !== deletedTask.id)
     );
@@ -314,7 +317,6 @@ export default function KanbanBoard({
   return (
     <div className="container mb-5">
       <EditModal editTaskForm={editTaskForm} setEditedTask={setEditedTask} />
-
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="row">
           <div className="col-4">
