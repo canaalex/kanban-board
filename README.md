@@ -2,6 +2,8 @@
 
 Welcome to my Kanban-Board project on GitHub! Join me on this journey of organizing tasks with ease and efficiency. Let's elevate our productivity together through intuitive task management on this personal Kanban board. Feel free to explore, contribute, and tailor it to your workflow needs. Happy organizing! ✨✨
 
+The tool is hosted on https://canaalex.github.io/kanban-board/
+
 
 # Getting Started with Create React App
 
